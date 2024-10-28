@@ -41,11 +41,13 @@ jobs:
       run: |
         mkdir build
         cd build
-        git clone https://github.com/onettboots/boolx-clang-build -b test
+        git clone https://github.com/onettboots/boolx-clang-build -b nbase
         cd boolx-clang-build
-        git config --global user.name "onettboots"
-        git config --global user.email "blackcocopet@gmail.com"
+        git config --global user.name "atusyarif"
+        git config --global user.email "atusyaripudin@gmail.com"
         git clone https://github.com/llvm/llvm-project -b llvmorg-20-init
-        bash build-toolchain.sh
+        source utils.sh
+        bash build_llvm.sh --shallow-clone --polly-opt --llvm-opt --bolt-opt
+        bash build_binutils.sh --targets=ARM,ARM64,X86
         tar -czf clang20.tar.gz install
         curl bashupload.com -T clang20.tar.gz
