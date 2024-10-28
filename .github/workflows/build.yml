@@ -4,44 +4,48 @@ on: [push]
 
 jobs:
   build:
-    runs-on: arch-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install dependencies
       run: |
-          sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm base-devel \
-          bc \
-          bison \
-          ccache \
-          clang \
-          cpio \
-          cmake \
-          flex \
-          git \
-          libelf \
-          lld \
-          llvm \
-          ninja \
-          openssl \
-          python3 \
-          uboot-tools \
-          tar \
-          curl
+        sudo apt-get update
+        sudo apt-get install -y bc \
+            binutils-dev \
+            bison \
+            build-essential \
+            ca-certificates \
+            ccache \
+            clang \
+            cmake \
+            curl \
+            file \
+            flex \
+            git \
+            libelf-dev \
+            libssl-dev \
+            lld \
+            make \
+            ninja-build \
+            python3-dev \
+            texinfo \
+            u-boot-tools \
+            xz-utils \
+            zlib1g-dev \
+            tar \
+            curl
 
     - name: Build Clang
       run: |
         mkdir build
         cd build
-        git clone https://github.com/onettboots/boolx-clang-build -b nbase
+        git clone https://github.com/onettboots/boolx-clang-build -b test
         cd boolx-clang-build
-        git config --global user.name "atusyarif"
-        git config --global user.email "atusyaripudin@gmail.com"
+        git config --global user.name "onettboots"
+        git config --global user.email "blackcocopet@gmail.com"
         git clone https://github.com/llvm/llvm-project -b llvmorg-20-init
-        source utils.sh
-        bash build_llvm.sh --shallow-clone --polly-opt --llvm-opt --bolt-opt
-        bash build_binutils.sh --targets=ARM,ARM64,X86
+        bash build-toolchain.sh
         tar -czf clang20.tar.gz install
         curl bashupload.com -T clang20.tar.gz
