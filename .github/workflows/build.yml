@@ -5,37 +5,30 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: archlinux
+    name: archlinux
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y bc \
-            binutils-dev \
-            bison \
-            build-essential \
-            ca-certificates \
-            ccache \
-            clang \
-            cmake \
-            curl \
-            file \
-            flex \
-            git \
-            libelf-dev \
-            libssl-dev \
-            lld \
-            make \
-            ninja-build \
-            python3-dev \
-            texinfo \
-            u-boot-tools \
-            xz-utils \
-            zlib1g-dev \
-            tar \
-            curl
+            pacman --noconfirm -Syu base-devel \
+          bc \
+          bison \
+          ccache \
+          clang \
+          cpio \
+          cmake \
+          flex \
+          git \
+          libelf \
+          lld \
+          llvm \
+          ninja \
+          openssl \
+          python3 \
+          uboot-tools
 
     - name: Build Clang
       run: |
